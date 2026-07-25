@@ -1,36 +1,18 @@
 package pokeapi
 
 import (
-	"encoding/json"
-	"io"
 	"net/http"
+	"time"
 )
 
-const baseUrl string = "https://pokeapi.co/api/v2"
+type Client struct {
+	httpClient http.Client
+}
 
-func FetchLocationAreas(next string) (LocationAreaResponse, error){
-	url := baseUrl + "/location-area"
-	if next != "" {
-		url = next
+func NewClient() Client {
+	return Client{
+		httpClient: http.Client{
+			Timeout: time.Minute,
+		},
 	}
-
-	res, err := http.Get(url)
-	if err != nil {
-		return LocationAreaResponse{}, err
-	}
-
-	defer res.Body.Close()
-
-	body, err := io.ReadAll(res.Body)
-	if err != nil {
-		return LocationAreaResponse{}, err
-	}
-
-	locationAreaResponse := LocationAreaResponse{}
-	err = json.Unmarshal(body, &locationAreaResponse)
-	if err != nil {
-		return LocationAreaResponse{}, err
-	}
-
-	return locationAreaResponse, nil
 }
