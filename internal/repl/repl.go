@@ -1,4 +1,4 @@
-package internal
+package repl
 
 import (
 	"bufio"
@@ -82,60 +82,4 @@ func cleanInput(text string) []string {
 	result := strings.Fields(lowered)
 
 	return result
-}
-
-func commandExit(c *config) error {
-	fmt.Println("Closing the Pokedex... Goodbye!")
-	os.Exit(0)
-	return nil
-}
-
-func commandHelp(c *config) error {
-	commands := getCommands()
-
-	fmt.Printf("Welcome to the Pokedex!\nUsage:\n")
-	for _, c := range commands {
-		fmt.Printf("%s: %s\n", c.name, c.description)
-	}
-
-	return nil
-}
-
-func commandMap(c *config) error {
-	locationAreaRes, err := fetchLocationAreas(c.Next)
-	if err != nil {
-		return err
-	}
-
-	c.Next = locationAreaRes.Next
-	c.Previous = locationAreaRes.Previous
-
-	displayLocationAreas(locationAreaRes.Results)
-
-	return nil
-}
-
-func commandMapB(c *config) error {
-	if c.Previous == "" {
-		fmt.Println("you're on the first page")
-		return nil
-	}
-
-	locationAreaRes, err := fetchLocationAreas(c.Previous)
-	if err != nil {
-		return err
-	}
-
-	c.Next = locationAreaRes.Next
-	c.Previous = locationAreaRes.Previous
-
-	displayLocationAreas(locationAreaRes.Results)
-
-	return nil
-}
-
-func displayLocationAreas(areas []LocationArea) {
-	for _, area := range areas {
-		fmt.Println(area.Name)
-	}
 }

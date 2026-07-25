@@ -1,4 +1,4 @@
-package internal
+package pokeapi
 
 import (
 	"encoding/json"
@@ -8,7 +8,7 @@ import (
 
 const baseUrl string = "https://pokeapi.co/api/v2"
 
-func fetchLocationAreas(next string) (LocationAreaResponse, error){
+func FetchLocationAreas(next string) (LocationAreaResponse, error){
 	url := baseUrl + "/location-area"
 	if next != "" {
 		url = next
@@ -28,6 +28,9 @@ func fetchLocationAreas(next string) (LocationAreaResponse, error){
 
 	locationAreaResponse := LocationAreaResponse{}
 	err = json.Unmarshal(body, &locationAreaResponse)
+	if err != nil {
+		return LocationAreaResponse{}, err
+	}
 
 	return locationAreaResponse, nil
 }

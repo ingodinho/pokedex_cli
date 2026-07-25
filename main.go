@@ -1,8 +1,8 @@
 package main
 
-import "github.com/ingodinho/pokedex_cli/internal"
+import "github.com/ingodinho/pokedex_cli/internal/repl"
 
 
 func main() {
-	internal.StartRepl()
+	repl.StartRepl()
 }
