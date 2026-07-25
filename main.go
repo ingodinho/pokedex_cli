@@ -1,7 +1,8 @@
 package main
 
-import "fmt"
+import "github.com/ingodinho/pokedex_cli/internal"
+
 
 func main() {
-	fmt.Println("Hello Pokedexcli")
+	internal.StartRepl()
 }
