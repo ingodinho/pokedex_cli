@@ -6,7 +6,8 @@ import (
 )
 
 func commandMap(c *config) error {
-	locationAreaRes, err := pokeapi.FetchLocationAreas(c.Next)
+	client := pokeapi.NewClient()
+	locationAreaRes, err := client.FetchLocationAreas(c.Next)
 	if err != nil {
 		return err
 	}
@@ -20,12 +21,13 @@ func commandMap(c *config) error {
 }
 
 func commandMapB(c *config) error {
-	if c.Previous == "" {
+	client := pokeapi.NewClient()
+	if c.Previous == nil {
 		fmt.Println("you're on the first page")
 		return nil
 	}
 
-	locationAreaRes, err := pokeapi.FetchLocationAreas(c.Previous)
+	locationAreaRes, err := client.FetchLocationAreas(c.Previous)
 	if err != nil {
 		return err
 	}
