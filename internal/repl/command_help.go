@@ -1,6 +1,8 @@
 package repl
 
-import "fmt"
+import (
+	"fmt"
+)
 
 func commandHelp(c *config) error {
 	commands := getCommands()

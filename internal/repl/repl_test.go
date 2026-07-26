@@ -1,17 +1,17 @@
 package repl
 
 import (
-	"testing"
 	"github.com/google/go-cmp/cmp"
+	"testing"
 )
 
 func TestCleanInput(t *testing.T) {
 	tests := map[string]struct {
-		input string
-		expected  []string
+		input    string
+		expected []string
 	}{
-		"two words": {input: "yallah hallah", expected: []string{"yallah", "hallah"}},
-		"casing": {input: "YaLlah hAlLah", expected: []string{"yallah", "hallah"}},
+		"two words":   {input: "yallah hallah", expected: []string{"yallah", "hallah"}},
+		"casing":      {input: "YaLlah hAlLah", expected: []string{"yallah", "hallah"}},
 		"whitespaces": {input: "     yallah      hallah       ", expected: []string{"yallah", "hallah"}},
 	}
 

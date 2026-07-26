@@ -5,6 +5,9 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"time"
+
+	"github.com/ingodinho/pokedex_cli/internal/pokeapi"
 )
 
 type cliCommand struct {
@@ -14,14 +17,20 @@ type cliCommand struct {
 }
 
 type config struct {
-	Next *string
+	Next     *string
 	Previous *string
+	client   *pokeapi.Client
 }
 
 func StartRepl() {
+	pokeClient := pokeapi.NewClient(time.Second * 10)
+	c := config{
+		client: pokeClient,
+	}
+
 	commands := getCommands()
-	c := config{}
 	scanner := bufio.NewScanner(os.Stdin)
+
 	for {
 		fmt.Print("Pokedex > ")
 		scanner.Scan()
@@ -42,7 +51,7 @@ func StartRepl() {
 
 		err := foundCommand.callback(&c)
 		if err != nil {
-			fmt.Printf("Error happened: %v", err)
+			fmt.Printf("error happened: %v", err)
 			continue
 		}
 
@@ -65,14 +74,14 @@ func getCommands() map[string]cliCommand {
 			callback:    commandHelp,
 		},
 		"map": {
-			name: "map",
+			name:        "map",
 			description: "Shows the next page of Areas",
-			callback: commandMap,
+			callback:    commandMap,
 		},
 		"mapb": {
-			name: "mapb",
+			name:        "mapb",
 			description: "Shows the previous page of Poke Areas",
-			callback: commandMapB,
+			callback:    commandMapB,
 		},
 	}
 }

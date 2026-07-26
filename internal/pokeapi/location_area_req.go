@@ -7,35 +7,43 @@ import (
 	"net/http"
 )
 
-func (c *Client) FetchLocationAreas(next *string) (LocationAreaResponse, error){
+func (c *Client) FetchLocationAreas(givenUrl *string) (LocationAreaResponse, error) {
 	url := baseUrl + "/location-area"
-	if next != nil {
-		url = *next
+	if givenUrl != nil {
+		url = *givenUrl
 	}
 
-	req, err := http.NewRequest("GET", url, nil)
-	if err != nil {
-		return LocationAreaResponse{}, err
-	}
+	var data []byte
 
-	res, err := c.httpClient.Do(req)
-	if err != nil {
-		return LocationAreaResponse{}, err
-	}
+	data, isCached := c.cache.Get(url)
 
-	if res.StatusCode > 399 {
-		return LocationAreaResponse{}, fmt.Errorf("Bad StatusCode: %v", res.StatusCode)
-	}
+	if !isCached {
+		req, err := http.NewRequest("GET", url, nil)
+		if err != nil {
+			return LocationAreaResponse{}, err
+		}
 
-	defer res.Body.Close()
+		res, err := c.httpClient.Do(req)
+		if err != nil {
+			return LocationAreaResponse{}, err
+		}
 
-	data, err := io.ReadAll(res.Body)
-	if err != nil {
-		return LocationAreaResponse{}, err
+		defer res.Body.Close()
+
+		if res.StatusCode > 399 {
+			return LocationAreaResponse{}, fmt.Errorf("bad status code: %v", res.StatusCode)
+		}
+
+		data, err = io.ReadAll(res.Body)
+		if err != nil {
+			return LocationAreaResponse{}, err
+		}
+
+		c.cache.Add(url, data)
 	}
 
 	locationAreaResponse := LocationAreaResponse{}
-	err = json.Unmarshal(data, &locationAreaResponse)
+	err := json.Unmarshal(data, &locationAreaResponse)
 	if err != nil {
 		return LocationAreaResponse{}, err
 	}
