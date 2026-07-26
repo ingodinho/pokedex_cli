@@ -8,7 +8,7 @@ import (
 )
 
 func (c *Client) FetchLocationAreas(givenUrl *string) (LocationAreaResponse, error) {
-	url := baseUrl + "/location-area"
+	url := baseUrl + "/location-area/?offset=0&limit=20"
 	if givenUrl != nil {
 		url = *givenUrl
 	}
