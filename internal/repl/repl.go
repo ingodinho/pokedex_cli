@@ -13,7 +13,7 @@ import (
 type cliCommand struct {
 	name        string
 	description string
-	callback    func(*config) error
+	callback    func(*config, string) error
 }
 
 type config struct {
@@ -49,9 +49,14 @@ func StartRepl() {
 			continue
 		}
 
-		err := foundCommand.callback(&c)
+		arg := ""
+		if len(cleanedInput) > 1 {
+			arg = cleanedInput[1]
+		}
+
+		err := foundCommand.callback(&c, arg)
 		if err != nil {
-			fmt.Printf("error happened: %v", err)
+			fmt.Printf("unhandled error in callback: %v\n", err)
 			continue
 		}
 
@@ -82,6 +87,11 @@ func getCommands() map[string]cliCommand {
 			name:        "mapb",
 			description: "Shows the previous page of Poke Areas",
 			callback:    commandMapB,
+		},
+		"explore": {
+			name:        "explore",
+			description: "Shows the list of possible pokemon encounters for a given Area",
+			callback:    commandExplore,
 		},
 	}
 }

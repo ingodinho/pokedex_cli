@@ -5,7 +5,7 @@ import (
 	"github.com/ingodinho/pokedex_cli/internal/pokeapi"
 )
 
-func commandMap(c *config) error {
+func commandMap(c *config, _ string) error {
 	if c.Next == nil && c.Previous != nil {
 		fmt.Println("you're on the last page")
 		return nil
@@ -24,7 +24,7 @@ func commandMap(c *config) error {
 	return nil
 }
 
-func commandMapB(c *config) error {
+func commandMapB(c *config, _ string) error {
 	if c.Previous == nil {
 		fmt.Println("you're on the first page")
 		return nil
