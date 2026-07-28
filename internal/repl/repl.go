@@ -20,12 +20,15 @@ type config struct {
 	Next     *string
 	Previous *string
 	client   *pokeapi.Client
+	pokedex  *pokeapi.Pokedex
 }
 
 func StartRepl() {
 	pokeClient := pokeapi.NewClient(time.Second * 10)
+	pokedex := pokeapi.NewPokedex()
 	c := config{
-		client: pokeClient,
+		client:  pokeClient,
+		pokedex: pokedex,
 	}
 
 	commands := getCommands()
@@ -92,6 +95,11 @@ func getCommands() map[string]cliCommand {
 			name:        "explore",
 			description: "Shows the list of possible pokemon encounters for a given Area",
 			callback:    commandExplore,
+		},
+		"catch": {
+			name:        "catch",
+			description: "Catch a pokemon with the given name",
+			callback:    commandCatch,
 		},
 	}
 }
