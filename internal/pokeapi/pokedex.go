@@ -19,3 +19,12 @@ func (pd *Pokedex) Add(pm PokemonDetailsResponse) {
 
 	pd.pokemon[pm.Name] = pm
 }
+
+func (pd *Pokedex) Get(key string) (PokemonDetailsResponse, bool) {
+	pd.mu.Lock()
+	defer pd.mu.Unlock()
+
+	pokemon, isCached := pd.pokemon[key]
+
+	return pokemon, isCached
+}
