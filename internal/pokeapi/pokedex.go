@@ -28,3 +28,7 @@ func (pd *Pokedex) Get(key string) (PokemonDetailsResponse, bool) {
 
 	return pokemon, isCached
 }
+
+func (pd *Pokedex) GetAll() map[string]PokemonDetailsResponse {
+	return pd.pokemon
+}
